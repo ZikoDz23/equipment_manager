@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="module_category_equipment_management" model="ir.module.category">
+            <field name="name">Equipment</field>
+            <field name="description">Helps you manage your company equipment.</field>
+            <field name="sequence">15</field>
+        </record>
+
+        <record id="privilege_equipment_management" model="res.groups.privilege">
+            <field name="name">Equipment</field>
+            <field name="sequence">15</field>
+            <field name="category_id" ref="module_category_equipment_management"/>
+        </record>
+
+        <record id="group_equipment_user" model="res.groups">
+            <field name="name">Equipment / User</field>
+            <field name="privilege_id" ref="privilege_equipment_management"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">The user will be able to read equipment and create assignments.</field>
+        </record>
+
+        <record id="group_equipment_manager" model="res.groups">
+            <field name="name">Equipment / Manager</field>
+            <field name="privilege_id" ref="privilege_equipment_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_equipment_user'))]"/>
+            <field name="comment">The user will have full access to the equipment management.</field>
+        </record>
+
+        <!-- Multi-company rules -->
+        <record id="equipment_item_comp_rule" model="ir.rule">
+            <field name="name">Equipment Item multi-company</field>
+            <field name="model_id" ref="model_equipment_item"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="equipment_category_comp_rule" model="ir.rule">
+            <field name="name">Equipment Category multi-company</field>
+            <field name="model_id" ref="model_equipment_category"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+        
+        <record id="equipment_assignment_comp_rule" model="ir.rule">
+            <field name="name">Equipment Assignment multi-company</field>
+            <field name="model_id" ref="model_equipment_assignment"/>
+            <field name="domain_force">['|', ('equipment_id.company_id', '=', False), ('equipment_id.company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

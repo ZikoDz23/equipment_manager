@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_asset_handover" model="ir.actions.report">
+        <field name="name">Asset Handover Form</field>
+        <field name="model">equipment.assignment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">equipment_management.report_asset_handover</field>
+        <field name="report_file">equipment_management.report_asset_handover</field>
+        <field name="binding_model_id" ref="model_equipment_assignment"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Asset Handover - %s' % object.employee_id.name</field>
+    </record>
+
+    <template id="report_asset_handover">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="assignment">
+                <t t-set="company" t-value="assignment.equipment_id.company_id"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">Asset Handover Form</h2>
+                        <p>
+                            This form confirms that the employee named below has received the listed company equipment.
+                        </p>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th>Employee</th>
+                                    <td><span t-field="assignment.employee_id.name"/></td>
+                                    <th>Assignment Date</th>
+                                    <td><span t-field="assignment.assigned_at" t-options="{'widget': 'datetime'}"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Equipment</th>
+                                    <td><span t-field="assignment.equipment_id.name"/></td>
+                                    <th>Reference</th>
+                                    <td><span t-field="assignment.equipment_id.reference"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Serial Number</th>
+                                    <td><span t-field="assignment.equipment_id.serial_number"/></td>
+                                    <th>Category</th>
+                                    <td><span t-field="assignment.equipment_id.category_id"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Condition at Handover</th>
+                                    <td colspan="3"><span t-field="assignment.condition_on_assignment"/></td>
+                                </tr>
+                                <tr t-if="assignment.notes">
+                                    <th>Handover Notes</th>
+                                    <td colspan="3"><span t-field="assignment.notes"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            I acknowledge receipt of this equipment in the condition recorded above and agree to take
+                            reasonable care of it and return it when requested or when my assignment ends.
+                        </p>
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <p><strong>Employee</strong></p>
+                                <p><strong>Name:</strong> <span t-field="assignment.employee_id.name"/></p>
+                                <br/><br/>
+                                <p><strong>Signature:</strong> __________________________________</p>
+                                <p><strong>Date:</strong> ______________________________________</p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Issued By</strong></p>
+                                <p><strong>Name:</strong> <span t-field="assignment.assigned_by.name"/></p>
+                                <br/><br/>
+                                <p><strong>Signature:</strong> __________________________________</p>
+                                <p><strong>Date:</strong> ______________________________________</p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

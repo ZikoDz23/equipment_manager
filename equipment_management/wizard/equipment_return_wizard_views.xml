@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_equipment_return_wizard_form" model="ir.ui.view">
+        <field name="name">equipment.return.wizard.form</field>
+        <field name="model">equipment.return.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Return Equipment">
+                <field name="assignment_id" invisible="1"/>
+                <group string="Return">
+                    <group>
+                        <field name="equipment_id"/>
+                        <field name="employee_id"/>
+                    </group>
+                    <group>
+                        <field name="returned_at"/>
+                        <field name="condition_on_return"/>
+                        <field name="return_status"/>
+                    </group>
+                </group>
+                <div class="text-muted">
+                    Choose the equipment's status after return. Select Under Maintenance if it needs inspection or repair.
+                </div>
+                <group string="Notes">
+                    <field name="notes" placeholder="Record damage, missing accessories, or inspection notes..." nolabel="1"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_return" string="Confirm Return" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
